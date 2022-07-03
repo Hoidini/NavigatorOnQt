@@ -3,6 +3,8 @@
 #include <QLayout>
 #include <QPushButton>
 #include <QTextLine>
+#include <QDialog>
+#include <QMessageBox>
 #include "navigatorhandler_declaration.h"
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)

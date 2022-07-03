@@ -22,6 +22,7 @@ private:
     void GlobalPosFilterX() noexcept;
     void GlobalPosFilterY() noexcept;
     std::shared_ptr<HandlerSyncPackage> curProm;
+    std::string ErrStr;
 public:
     QPictureBox(const QSize& size, QWidget* parent = nullptr);
     ~QPictureBox();

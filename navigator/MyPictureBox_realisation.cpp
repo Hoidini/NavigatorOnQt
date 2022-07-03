@@ -44,13 +44,9 @@ void QPictureBox::paintEvent(QPaintEvent* pEvent){
         painter.drawImage(0, 0, *(this->scaledImage), this->globalPos.x(), this->globalPos.y());
     }
     if(this->curProm != nullptr && this->curProm->IsReady()){
-        auto strEx = this->curProm->GetExStr();
-        if(strEx != ""){
+        this->ErrStr = this->curProm->GetExStr();
+        if(this->ErrStr != ""){
             this->curProm = nullptr;
-            /*QMessageBox* mb = new QMessageBox(QMessageBox::Information, "WTF", "WTF");
-            mb->exec();
-            delete mb;*/
-
         }
         else{
             this->rectsToDraw = this->curProm->GetCont();
@@ -110,6 +106,12 @@ void QPictureBox::mouseMoveEvent(QMouseEvent*mEvent){
 }
 void QPictureBox::timerEvent(QTimerEvent* tEvent) {
     this->update();
+    if(this->ErrStr != ""){
+        QMessageBox* mb = new QMessageBox(QMessageBox::Information, "Input adress error", QString::fromStdString(this->ErrStr));
+        mb->exec();
+        delete mb;
+        this->ErrStr = "";
+    }
 }
 void QPictureBox::wheelEvent(QWheelEvent* wEvent){
     int angle = wEvent->angleDelta().y();
