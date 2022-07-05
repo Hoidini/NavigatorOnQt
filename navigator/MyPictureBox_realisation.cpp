@@ -1,5 +1,6 @@
 #include "MyPictureBox_declaration.h"
 #include <QPaintEngine>
+#include <QApplication>
 #include<QWheelEvent>
 #include <QMessageBox>
 void QPictureBox::GlobalPosFilterX() noexcept{
@@ -35,6 +36,7 @@ bool IsPromiseReady(std::shared_future<T> pr){
 void QPictureBox::SetProm(std::shared_ptr<HandlerSyncPackage> prom){
     this->rectsToDraw.reset();
     this->curProm = prom;
+    emit this->SendWaitAnimState(true);
 }
 QPictureBox::~QPictureBox() = default;
 void QPictureBox::paintEvent(QPaintEvent* pEvent){
@@ -44,17 +46,15 @@ void QPictureBox::paintEvent(QPaintEvent* pEvent){
         painter.drawImage(0, 0, *(this->scaledImage), this->globalPos.x(), this->globalPos.y());
     }
     if(this->curProm != nullptr && this->curProm->IsReady()){
+        emit this->SendWaitAnimState(false);
         this->ErrStr = this->curProm->GetExStr();
-        if(this->ErrStr != ""){
-            this->curProm = nullptr;
-        }
-        else{
+        if(this->ErrStr == ""){
             this->rectsToDraw = this->curProm->GetCont();
-            this->curProm = nullptr;
         }
+        this->curProm = nullptr;
     }
     //43.18, 25.12
-    if(this->rectsToDraw.has_value()){
+      if(this->rectsToDraw.has_value()){
        qreal ySizeGlobalScaleKoef = static_cast<qreal>(this->scaledImage->height()) / 251;
        qreal xSizeGlobalScaleKoef = static_cast<qreal>(this->scaledImage->width()) / 431;
        std::optional<QPoint> prev;
@@ -107,7 +107,7 @@ void QPictureBox::mouseMoveEvent(QMouseEvent*mEvent){
 void QPictureBox::timerEvent(QTimerEvent* tEvent) {
     this->update();
     if(this->ErrStr != ""){
-        QMessageBox* mb = new QMessageBox(QMessageBox::Information, "Input adress error", QString::fromStdString(this->ErrStr));
+        QMessageBox* mb = new QMessageBox(QMessageBox::Information, "Error", QString::fromStdString(this->ErrStr));
         mb->exec();
         delete mb;
         this->ErrStr = "";

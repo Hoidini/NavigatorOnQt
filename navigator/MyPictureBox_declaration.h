@@ -6,6 +6,7 @@
 #include <QRect>
 #include <vector>
 #include <string>
+#include <QMovie>
 #include "navigatorhandler_declaration.h"
 class QPictureBox : public QWidget{
     Q_OBJECT
@@ -43,6 +44,8 @@ protected:
     void mousePressEvent(QMouseEvent *pEvent) override;
     QSize sizeHint() const override;
     void wheelEvent(QWheelEvent* wEvent) override;
+signals:
+    void SendWaitAnimState(bool animState);
 public slots:
     void ShowMessageBox(QString str1, QString str2);
 };

@@ -16,9 +16,13 @@ public:
 
 private slots:
     void on_pushButton_released();
+    void StopWaitAnim();
+    void StartWaitAnim();
+    void ChangeAnimState(bool newAnimState);
 
 private:
     Ui::MainWindow *ui;
     QPictureBox* pBox;
+    std::unique_ptr<QMovie> waitAnim;
 };
 #endif // MAINWINDOW_H
