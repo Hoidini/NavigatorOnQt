@@ -17,9 +17,8 @@ class NavigatorHandler
 private:
     std::shared_ptr<std::pair<QString, QString>> adresses;
     std::unique_ptr<std::thread> workThread;
-    mutable std::mutex taskHandlingMutex;//вызывается для безопасного изменения пути и работы с задачей
     mutable std::mutex taskReadingWritingMutex;//вызывается для безопасного чтения пути и обещаний
-    std::atomic_bool isEnd;
+    bool isEnd;
     RectsPathCont curPath; //изменение требует захвата мьютекса
     std::condition_variable isTaskAddedOrEdited;
     std::unique_ptr<d_algorithm::NavigatorTask> curNavigatorTask; //изменение требует захвата мьютекса
