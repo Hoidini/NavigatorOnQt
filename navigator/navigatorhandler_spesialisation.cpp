@@ -13,7 +13,7 @@ NavigatorHandler& NavigatorHandler::GetInstance(){
     static NavigatorHandler handler;
     return handler;
 }
-void NavigatorHandler::ThreadProcess(){
+void NavigatorHandler::ThreadProcess(){ //переписать под ожидание
     while(!this->isEnd.load(std::memory_order_acquire)){
         std::unique_lock dc(this->taskReadingWritingMutex);
         while(!(this->adresses != nullptr || this->isEnd.load(std::memory_order_acquire))){
